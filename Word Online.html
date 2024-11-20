@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100%;
+            background-color: #f3f3f3;
+            color: #333;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .title-bar {
+            background-color: #2b7a4b;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .title-bar img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .ribbon {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d4d4d4;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        select, button {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            padding: 6px 12px;
+            border: 1px solid #d4d4d4;
+            border-radius: 3px;
+            background-color: #ffffff;
+            margin-right: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        select:hover, button:hover {
+            border-color: #b3b3b3;
+            background-color: #f5f5f5;
+        }
+        select:focus, button:focus {
+            outline: none;
+            border-color: #2b7a4b;
+            box-shadow: 0 0 0 2px rgba(43, 122, 75, 0.2);
+        }
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+        }
+        button.active {
+            background-color: #e6e6e6;
+            border-color: #999;
+        }
+        .editor-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f3f3f3;
+            transition: all 0.3s ease;
+        }
+        #editor {
+            width: 816px;
+            height: 1056px;
+            padding: 96px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            outline: none;
+            font-size: 11pt;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+        #editor:empty:before {
+            content: attr(data-placeholder);
+            color: #999;
+        }
+        .status-bar {
+            background-color: #f3f3f3;
+            border-top: 1px solid #d4d4d4;
+            padding: 8px 20px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .animate-slideDown {
+            animation: slideDown 0.3s ease-in-out;
+        }
+        .animate-scaleUp {
+            animation: scaleUp 0.3s ease-in-out;
+        }
+        #saveBtn {
+            background-color: #2b7a4b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            width: auto;
+            height: auto;
+        }
+        #saveBtn:hover {
+            background-color: #235f3a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar animate-slideDown">
+            <img src="https://i.ibb.co/bvTRrPG/png-microsoft-word-white-logo-701751694711786heqobgxton-removebg-preview.png" alt="Word Logo">
+            Word Online
+        </div>
+        <div class="ribbon animate-fadeIn">
+            <select id="fontSelect">
+                <option value="Arial">Arial</option>
+                <option value="Calibri">Calibri</option>
+                <option value="Cambria">Cambria</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Lucida Sans">Lucida Sans</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            <select id="fontSize">
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+                <option value="22">22</option>
+                <option value="24">24</option>
+                <option value="26">26</option>
+                <option value="28">28</option>
+                <option value="36">36</option>
+                <option value="48">48</option>
+                <option value="72">72</option>
+            </select>
+            <button id="boldBtn" title="Bold"><i class="fas fa-bold"></i></button>
+            <button id="italicBtn" title="Italic"><i class="fas fa-italic"></i></button>
+            <button id="underlineBtn" title="Underline"><i class="fas fa-underline"></i></button>
+            <button id="saveBtn">Save</button>
+        </div>
+        <div class="editor-container">
+            <div id="editor" contenteditable="true" data-placeholder="Start typing..." class="animate-scaleUp"></div>
+        </div>
+        <div class="status-bar animate-fadeIn">
+            <span id="wordCount">Words: 0</span>
+            <span>100%</span>
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const fontSelect = document.getElementById('fontSelect');
+        const fontSize = document.getElementById('fontSize');
+        const boldBtn = document.getElementById('boldBtn');
+        const italicBtn = document.getElementById('italicBtn');
+        const underlineBtn = document.getElementById('underlineBtn');
+        const wordCountElement = document.getElementById('wordCount');
+        const saveBtn = document.getElementById('saveBtn');
+
+        let typingTimer;
+
+        fontSelect.addEventListener('change', () => {
+            document.execCommand('fontName', false, fontSelect.value);
+            editor.focus();
+            animateElement(editor, 'animate-scaleUp');
+        });
+
+        fontSize.addEventListener('change', () => {
+            document.execCommand('fontSize', false, fontSize.value);
+            editor.focus();
+            animateElement(editor, 'animate-scaleUp');
+        });
+
+        boldBtn.addEventListener('click', () => {
+            document.execCommand('bold', false, null);
+            editor.focus();
+            toggleButtonActive(boldBtn);
+        });
+
+        italicBtn.addEventListener('click', () => {
+            document.execCommand('italic', false, null);
+            editor.focus();
+            toggleButtonActive(italicBtn);
+        });
+
+        underlineBtn.addEventListener('click', () => {
+            document.execCommand('underline', false, null);
+            editor.focus();
+            toggleButtonActive(underlineBtn);
+        });
+
+        editor.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(updateWordCount, 500); // wait 500 ms for when user stops typing
+        });
+
+        saveBtn.addEventListener('click', () => {
+            const fileName = prompt("Enter file name:", "document");
+            if (fileName) {
+                const fileExtension = prompt("Enter file extension (e.g., doc, docx, txt):", "docx");
+                if (fileExtension) {
+                    const content = editor.innerHTML;
+                    const blob = new Blob([content], { type: 'text/html' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `${fileName}.${fileExtension}`;
+                    a.click();
+                }
+            }
+        });
+
+        function updateWordCount() {
+            const text = editor.innerText || editor.textContent;
+            const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+            wordCountElement.textContent = `Words: ${wordCount}`;
+            animateElement(wordCountElement, 'animate-fadeIn');
+        }
+
+        function animateElement(element, animationClass) {
+            element.classList.add(animationClass);
+            setTimeout(() => {
+                element.classList.remove(animationClass);
+            }, 300);
+        }
+
+        function toggleButtonActive(button) {
+            button.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
